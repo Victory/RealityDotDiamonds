@@ -1,0 +1,1 @@
+Public files to be served as statics

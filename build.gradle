@@ -1,0 +1,63 @@
+apply plugin: 'java'
+apply plugin: "com.fizzed.rocker"
+apply plugin: 'idea'
+apply plugin: "application"
+
+group 'realitydiamonds'
+version '0.0.1'
+
+sourceCompatibility = 1.8
+mainClassName = "diamonds.reality.RealityDiamonds"
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+rocker {
+    //outputBaseDirectory = buildDir.toString() + "/generated/source/apt"
+    // Directory where the java classes are generated and stores rocker-compiler.conf (used by RockerRuntime.getInstance().setReloading(true))
+    //classBaseDirectory = buildDir.toString() + "/classes"
+
+    extendsModelClass 'diamonds.reality.templateengine.BaseModel'
+}
+
+sourceSets {
+    main {
+        rocker {
+            srcDir('src/main/java')
+        }
+    }
+    test {
+       java {
+         srcDir('src/test')
+       }
+    }
+}
+
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter() // Needed for plugin's dependencies
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "gradle.plugin.com.fizzed:rocker-gradle-plugin:0.19.0"
+    }
+}
+
+dependencies {
+    runtime files(buildDir.toString() + "/classes/main/rocker-compiler.conf")
+
+    compile group: 'org.dfhu',
+            name: 'sparkingrocks',
+            version: '1.0.0'
+
+    testCompile group: 'org.powermock',
+            name: 'powermock-mockito-release-full',
+            version: '1.5.4'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
